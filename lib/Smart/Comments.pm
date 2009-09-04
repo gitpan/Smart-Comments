@@ -1,9 +1,10 @@
 package Smart::Comments;
 
-use version; $VERSION = qv('1.0.3');
-
-use warnings;
+use 5.008;
 use strict;
+use warnings;
+use version; our $VERSION = qv('1.0.4');
+
 use Carp;
 
 use List::Util qw(sum);
@@ -393,7 +394,7 @@ sub _while_progress {
 
         # How big does that make the bar itself (use reciprocal growth)...
         my $length = int(($fillwidth-$leaderwidth)
-                           *(1-$whilerate/($whilerate+$at)));
+                           *(1-$whilerate/($whilerate+$at))+0.000000000001);
 
         # Don't update if the picture would look the same...
         return
@@ -491,7 +492,7 @@ Smart::Comments - Comments that do more than just sit there
 
 =head1 VERSION
 
-This document describes Smart::Comments version 1.0.3
+This document describes Smart::Comments version 1.0.4
 
 
 =head1 SYNOPSIS
