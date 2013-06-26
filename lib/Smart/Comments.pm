@@ -1,10 +1,9 @@
 package Smart::Comments;
 
-use 5.008;
-use strict;
-use warnings;
-use version; our $VERSION = qv('1.0.4');
+our $VERSION = '1.000004';
 
+use warnings;
+use strict;
 use Carp;
 
 use List::Util qw(sum);
@@ -394,7 +393,7 @@ sub _while_progress {
 
         # How big does that make the bar itself (use reciprocal growth)...
         my $length = int(($fillwidth-$leaderwidth)
-                           *(1-$whilerate/($whilerate+$at))+0.000000000001);
+                           *(1-$whilerate/($whilerate+$at)));
 
         # Don't update if the picture would look the same...
         return
@@ -428,10 +427,12 @@ sub _Dump {
     my %args = @_;
     my ($pref, $varref, $nonl) = @args{qw(pref var nonl)};
 
-    # Handle timestamps...
+    # Handle timestamps and spacestamps...
     my (undef, $file, $line) = caller;
     $pref =~ s/<(?:now|time|when)>/scalar localtime()/ge;
     $pref =~ s/<(?:here|place|where)>/"$file", line $line/g;
+    $pref =~ s/<(?:file)>/$file/g;
+    $pref =~ s/<(?:line)>/$line/g;
 
     # Add a newline?
     my @caller = caller;
@@ -492,7 +493,7 @@ Smart::Comments - Comments that do more than just sit there
 
 =head1 VERSION
 
-This document describes Smart::Comments version 1.0.4
+This document describes Smart::Comments version 1.000004
 
 
 =head1 SYNOPSIS
@@ -679,8 +680,8 @@ would produce something like:
 
     ### [Fri Nov 18 15:11:15 EST 2005] Acquiring data...
 
-There are also "spacestamps": C<< <here> >> (or C<< <line> >> or C<<
-<loc> >> or C<< <place> >> or C<< <where> >>):
+There are also "spacestamps": C<< <here> >>
+(or C<< <loc> >> or C<< <place> >> or C<< <where> >>):
 
     ### Acquiring data at <loc>...
 
@@ -688,7 +689,16 @@ to produce something like:
 
     ### Acquiring data at "demo.pl", line 7...
 
-You can, of course, use both in the same comment as well.
+You can also request just the filename (C<< <file> >>) or just the line
+number (C<< <line> >>) to get finer control over formatting:
+
+    ### Acquiring data at <file>[<line>]...
+
+and produce something like:
+
+    ### Acquiring data at demo.pl[7]...
+
+You can, of course, use any combination of stamps in the one comment.
 
 =back
 
