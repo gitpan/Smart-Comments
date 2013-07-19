@@ -13,23 +13,22 @@ while ($count < 100) {    ### while:===[%]   done (%)
     $count++;
 }
 
-use Data::Dumper 'Dumper';
-warn Dumper [ $STDERR ];
+close *STDERR;
+open *STDERR, '>-';
 
-like $STDERR, qr/while:\[0\]                  done \(0\)\r/
-                                            => 'First iteration';
+my $prev_count = -1;
+sub test_format_and_incr {
+    my ($n, $output) = @_;
+    subtest "Iteration $n" => sub {
+        ok $output =~ m/while:=*\[(\d+)\]\s+done \(\1\)/ => 'Correct format';
+        my $count = $1;
+        cmp_ok $count, '>', $prev_count  => 'Correctly incremented';
+        $prev_count = $count;
+    };
+}
 
-like $STDERR, qr/while:=\[2\]                 done \(2\)\r/ 
-                                            => 'Second iteration';
+my @outputs = grep /\S/, split /\r/, $STDERR;
 
-like $STDERR, qr/while:==\[4\]                done \(4\)\r/ 
-                                            => 'Third iteration';
-
-like $STDERR, qr/while:===\[7\]               done \(7\)\r/ 
-                                            => 'Fourth iteration';
-
-like $STDERR, qr/while:====\[9\]              done \(9\)\r/ 
-                                            => 'Fifth iteration';
-
-like $STDERR, qr/while:=====\[14\]           done \(14\)\r/ 
-                                            => 'Sixth iteration';
+for my $n (0..5) {
+    test_format_and_incr($n, $outputs[$n]);
+}

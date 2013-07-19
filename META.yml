@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Smart-Comments
-version:            1.000004
+version:            1.000005
 abstract:           Comments that do more than just sit there
 author:
     - Damian Conway <DCONWAY@cpan.org>

@@ -1,6 +1,6 @@
 package Smart::Comments;
 
-our $VERSION = '1.000004';
+our $VERSION = '1.000005';
 
 use warnings;
 use strict;
@@ -493,7 +493,7 @@ Smart::Comments - Comments that do more than just sit there
 
 =head1 VERSION
 
-This document describes Smart::Comments version 1.000004
+This document describes Smart::Comments version 1.000005
 
 
 =head1 SYNOPSIS
@@ -849,7 +849,7 @@ example:
 
     for (@candidates) {       ### Evaluating |===[%]    |
 
-would be aninated like so:
+would be animated like so:
 
     Evaluating |[0%]                       |
 
